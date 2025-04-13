@@ -5,47 +5,52 @@
 // Execute `rustlings hint structs1` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
-struct ColorClassicStruct {
-    // TODO: Something goes here
-}
 
-struct ColorTupleStruct(/* TODO: Something goes here */);
+
 
 #[derive(Debug)]
-struct UnitLikeStruct;
+struct Order {
+    name: String,
+    year: u32,
+    made_by_phone: bool,
+    made_by_mobile: bool,
+    made_by_email: bool,
+    item_number: u32,
+    count: u32,
+}
+
+fn create_order_template() -> Order {
+    Order {
+        name: String::from("Bob"),
+        year: 2019,
+        made_by_phone: false,
+        made_by_mobile: false,
+        made_by_email: true,
+        item_number: 123,
+        count: 0,
+    }
+}
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn classic_c_structs() {
-        // TODO: Instantiate a classic c struct!
-        // let green =
-
-        assert_eq!(green.red, 0);
-        assert_eq!(green.green, 255);
-        assert_eq!(green.blue, 0);
-    }
-
-    #[test]
-    fn tuple_structs() {
-        // TODO: Instantiate a tuple struct!
-        // let green =
-
-        assert_eq!(green.0, 0);
-        assert_eq!(green.1, 255);
-        assert_eq!(green.2, 0);
-    }
-
-    #[test]
-    fn unit_structs() {
-        // TODO: Instantiate a unit-like struct!
-        // let unit_like_struct =
-        let message = format!("{:?}s are fun!", unit_like_struct);
-
-        assert_eq!(message, "UnitLikeStructs are fun!");
+    fn your_order() {
+        let order_template = create_order_template();
+        // TODO: Create your own order using the update syntax and template above!
+        let your_order = Order{
+            name: String::from("Hacker in Rust"),
+            count: 1,
+            ..order_template 
+        };
+        assert_eq!(your_order.name, "Hacker in Rust");
+        assert_eq!(your_order.year, order_template.year);
+        assert_eq!(your_order.made_by_phone, order_template.made_by_phone);
+        assert_eq!(your_order.made_by_mobile, order_template.made_by_mobile);
+        assert_eq!(your_order.made_by_email, order_template.made_by_email);
+        assert_eq!(your_order.item_number, order_template.item_number);
+        assert_eq!(your_order.count, 1);
     }
 }

@@ -2,7 +2,7 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
+
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
@@ -69,14 +69,45 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
+
+	// 修改：实现 merge 方法，合并两个有序链表，并增加泛型约束 T: PartialOrd + Copy
+	pub fn merge(list_a: LinkedList<T>, list_b: LinkedList<T>) -> Self
+	where
+	    T: PartialOrd + Copy,
 	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
-        }
+	    let mut merged = LinkedList::new();
+	    let mut i = 0;
+	    let mut j = 0;
+	    // 为了能够调用 get 方法，声明可变副本
+	    let mut list_a = list_a;
+	    let mut list_b = list_b;
+	
+	    // 当两个链表均未耗尽时，比较当前值，将较小者添加到 merged
+	    while i < list_a.length && j < list_b.length {
+	        let a_val = *list_a.get(i as i32).unwrap();
+	        let b_val = *list_b.get(j as i32).unwrap();
+	        if a_val <= b_val {
+	            merged.add(a_val);
+	            i += 1;
+	        } else {
+	            merged.add(b_val);
+	            j += 1;
+	        }
+	    }
+	
+	    // 添加 list_a 剩余的节点
+	    while i < list_a.length {
+	        merged.add(*list_a.get(i as i32).unwrap());
+	        i += 1;
+	    }
+	
+	    // 添加 list_b 剩余的节点
+	    while j < list_b.length {
+	        merged.add(*list_b.get(j as i32).unwrap());
+	        j += 1;
+	    }
+	
+	    merged
 	}
 }
 
@@ -149,6 +180,7 @@ mod tests {
 			assert_eq!(target_vec[i],*list_c.get(i as i32).unwrap());
 		}
 	}
+	
 	#[test]
 	fn test_merge_linked_list_2() {
 		let mut list_a = LinkedList::<i32>::new();

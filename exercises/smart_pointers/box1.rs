@@ -18,41 +18,25 @@
 //
 // Execute `rustlings hint box1` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
 
-#[derive(PartialEq, Debug)]
-pub enum List {
-    Cons(i32, List),
-    Nil,
-}
+
+#![forbid(unused_imports)] // Do not change this, (or the next) line.
+use std::sync::Arc;
+use std::thread;
 
 fn main() {
-    println!("This is an empty cons list: {:?}", create_empty_list());
-    println!(
-        "This is a non-empty cons list: {:?}",
-        create_non_empty_list()
-    );
-}
+    let numbers: Vec<_> = (0..100u32).collect();
+    let shared_numbers =  Arc::new(numbers);// TODO
+    let mut joinhandles = Vec::new();
 
-pub fn create_empty_list() -> List {
-    todo!()
-}
-
-pub fn create_non_empty_list() -> List {
-    todo!()
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_create_empty_list() {
-        assert_eq!(List::Nil, create_empty_list())
+    for offset in 0..8 {
+        let child_numbers =  Arc::clone(&shared_numbers);// TODO
+        joinhandles.push(thread::spawn(move || {
+            let sum: u32 = child_numbers.iter().filter(|&&n| n % 8 == offset).sum();
+            println!("Sum of offset {} is {}", offset, sum);
+        }));
     }
-
-    #[test]
-    fn test_create_non_empty_list() {
-        assert_ne!(create_empty_list(), create_non_empty_list())
+    for handle in joinhandles.into_iter() {
+        handle.join().unwrap();
     }
 }
